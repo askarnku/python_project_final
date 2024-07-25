@@ -14,6 +14,8 @@ disk_threshold="90"
 #batch13 web hook
 slack_wh="$SLACK_WEBHOOK_URL"
 
+echo "$slack_wh"
+
 
 
 
