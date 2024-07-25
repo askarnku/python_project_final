@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/.bashrc
+
 echo $(date)
 
 #cpu use threshold
