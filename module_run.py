@@ -31,7 +31,9 @@ for node, addr in nodes.items():
 
         # Example: Execute a command (like 'hostname')
         stdin, stdout, stderr = ssh_client.exec_command(command_mem)
-        print(f"Hostname of {node}: {stdout.read().decode().strip()}")
+        print(f"stout: {stdout.read().decode().strip()}")
+        print(f"stderr of {node}: {stderr.read().decode().strip()}")
+
 
         # Close the SSH connection
         ssh_client.close()
