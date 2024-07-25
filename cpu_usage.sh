@@ -41,7 +41,7 @@ for key in "${!nodes[@]}"; do
     disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
 
     #Warning of CPU MEM DISK usage if it is above threshold
-    payload="Stats: cpu usage: $cpu_usage memory usage: $memory_usage disk usage: $disk_usage"
+    payload="Stats: cpu usage: $cpu_usage% memory usage: $memory_usage% disk usage: $disk_usage%"
 
     curl -X POST -H 'Content-type: application/json' --data "{"text":\"$key $payload\"}" $slack_wh
 
