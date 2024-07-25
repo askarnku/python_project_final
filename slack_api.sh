@@ -1,6 +1,8 @@
 #!/bin/bash
 
-slack_wh="$SLACK_WEBHOOK_URL_DEV"
+source ~/.bashrc
+
+slack_wh=$SLACK_WEBHOOK_URL_DEV
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Testing"}' $slack_wh
 
