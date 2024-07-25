@@ -1,5 +1,22 @@
 #!/bin/bash
 
+
+declare -A nodes
+
+nodes[node1]='ec2-user@3.95.184.194'
+nodes[node2]='ec2-user@54.237.186.247'
+
+# Print all elements of the associative array
+for key in "${!nodes[@]}"; do
+    echo "Key: $key, Value: ${nodes[$key]}"
+done
+
+exit 1
+
+
+
+
+
 # Define the child server's SSH details
 child_server="ec2-user@3.95.184.194"
 
