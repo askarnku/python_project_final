@@ -67,7 +67,7 @@ for key in "${!nodes[@]}"; do
 
         current_node="$key"
         date_time=$(date)
-        warning="WARNING!!! Low on disk storage: $disk_usage% used on $key!"
+        warning="WARNING!!! Low on disk storage: $disk_usage used on $key!"
 
         json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" \
             '{text: ($date + "\n" + $warning + "\n")}')
