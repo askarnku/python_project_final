@@ -20,6 +20,11 @@ for key in "${!nodes[@]}"; do
     # Get disk usage
     disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
 
+    echo "CPU Usage: $cpu_usage%"
+    echo "Memory Usage: $memory_usage%"
+    echo "Disk Usage: $disk_usage"
+
+
 done
 
 exit 1
