@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo $(date)
+#cpu use threshold
+cpu_threshold="80"
+ #mem idle threshold
+mem_threshold="80"
+ #disk use threshold
+disk_threshold="90"
 
 declare -A nodes
 
@@ -26,27 +33,4 @@ for key in "${!nodes[@]}"; do
 
 
 done
-
-exit 1
-
-
-
-
-
-# Define the child server's SSH details
-
-
-# Get CPU usage by using the top command and parse it
-cpu_usage=$(ssh $child_server "mpstat 1 1 | awk '/Average:/ {print 100 - \$12}'")
-
-# Get memory usage
-memory_usage=$(ssh $child_server "free -m | awk '/Mem:/ {print \$3/\$2 * 100.0}'")
-
-# Get disk usage
-disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
-
-# Print the results
-echo "CPU Usage: $cpu_usage%"
-echo "Memory Usage: $memory_usage%"
-echo "Disk Usage: $disk_usage"
 
