@@ -12,7 +12,7 @@ mem_threshold="80"
 disk_threshold="90"
 
 #batch13 web hook
-slack_wh='https://hooks.slack.com/services/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'
+slack_wh='https://hooks.slack.com/services/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'
 
 
 
@@ -45,7 +45,6 @@ for key in "${!nodes[@]}"; do
     echo "CPU Usage: $cpu_usage%"
     echo "Memory Usage: $memory_usage%"
     echo "Disk Usage: $disk_usage"
-
 
 done
 

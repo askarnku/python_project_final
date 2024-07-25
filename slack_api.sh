@@ -1,3 +1,7 @@
-slack_wh='https://hooks.slack.com/services/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'
+#!/bin/bash
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $slack_wh
+# https://hooks.slack.com/services/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
+
+slack_wh='https://hooks.slack.com/services/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'
+
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Testing"}' $slack_wh
