@@ -47,10 +47,10 @@ for key in "${!nodes[@]}"; do
 
         current_node="$key"
         date_time=$(date)
-        warning="WARNING!!! High CPU usage at: $cpu_usage!"
+        warning="WARNING!!! High CPU usage at: $cpu_usage on $key!"
 
-        json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" --arg node "$current_node" \
-            '{text: ($date + "\n" + $warning + "\n" + $node)}')
+        json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" \
+            '{text: ($date + "\n" + $warning + "\n")}')
 
         curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
     fi
