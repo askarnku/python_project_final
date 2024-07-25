@@ -8,7 +8,7 @@ mem_threshold="$2"
 disk_threshold="$3"
 
 # Slack Webhook
-slack_wh="$SLACK_WEBHOOK_URL"
+slack_wh="$SLACK_WEBHOOK_URL_DEV"
 
 # Node definitions
 declare -A nodes=(
