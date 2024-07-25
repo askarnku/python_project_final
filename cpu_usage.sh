@@ -14,7 +14,7 @@ mem_threshold="80"
 disk_threshold="90"
 
 #batch13 web hook
-slack_wh="$SLACK_WEBHOOK_URL"
+slack_wh="$SLACK_WEBHOOK_URL_DEV"
 
 echo "$slack_wh"
 
@@ -43,7 +43,7 @@ for key in "${!nodes[@]}"; do
     #Warning of CPU MEM DISK usage if it is above threshold
     payload="Stats: cpu usage: $cpu_usage memory usage: $memory_usage disk usage: $disk_usage"
 
-    curl -X POST -H 'Content-type: application/json' --data "{"text":\"$payload\"}" $slack_wh
+    curl -X POST -H 'Content-type: application/json' --data "{"text":\"$key $payload\"}" $slack_wh
 
     # curl -X POST -H 'Content-type: application/json' --data "{"text":\"$payload\"}" $slack_wh
 
