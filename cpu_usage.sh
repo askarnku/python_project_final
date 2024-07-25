@@ -12,7 +12,7 @@ mem_threshold="50"
 disk_threshold="90"
 
 #batch13 web hook
-slack_wh="$SLACK_WEBHOOK_URL"
+slack_wh="$SLACK_WEBHOOK_URL_DEV"
 
 
 declare -A nodes
