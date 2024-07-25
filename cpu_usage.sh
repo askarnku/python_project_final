@@ -12,7 +12,7 @@ mem_threshold="80"
 disk_threshold="90"
 
 #batch13 web hook
-slack_wh='https://hooks.slack.com/services/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'
+slack_wh='https://hooks.slack.com/services/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'
 
 
 
