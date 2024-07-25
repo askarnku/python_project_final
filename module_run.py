@@ -23,14 +23,14 @@ for node, addr in nodes.items():
     user, host = addr.split('@')
     try:
 
-        # Command to get CPU usage
-        command_cpu = "mpstat 1 1 | awk '/Average:/ {print 100 - $12}'"
+        # Command to get MEM usage
+        command_mem = "free -m | awk '/Mem:/ {print \$3/\$2 * 100.0}'"
 
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
 
         # Example: Execute a command (like 'hostname')
-        stdin, stdout, stderr = ssh_client.exec_command(command_cpu)
+        stdin, stdout, stderr = ssh_client.exec_command(command_mem)
         print(f"Hostname of {node}: {stdout.read().decode().strip()}")
 
         # Close the SSH connection
