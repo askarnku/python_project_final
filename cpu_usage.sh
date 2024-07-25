@@ -1,12 +1,21 @@
 #!/bin/bash
 
 echo $(date)
+
 #cpu use threshold
 cpu_threshold="80"
- #mem idle threshold
+
+#mem idle threshold
 mem_threshold="80"
- #disk use threshold
+
+#disk use threshold
 disk_threshold="90"
+
+#batch13 web hook
+slack_wh='https://hooks.slack.com/services/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'
+
+
+
 
 declare -A nodes
 
@@ -26,6 +35,12 @@ for key in "${!nodes[@]}"; do
 
     # Get disk usage
     disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
+
+    #Warning of CPU MEM DISK usage if it is above threshold
+    payload="Stats: cpu usage: $cpu_usage memory usage: $memory_usage disk usage: $disk_usage"
+
+    curl -X POST -H 'Content-type: application/json' --data "{"text":\"$payload\"}" $slack_wh
+
 
     echo "CPU Usage: $cpu_usage%"
     echo "Memory Usage: $memory_usage%"
