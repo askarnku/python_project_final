@@ -2,7 +2,7 @@
 
 import paramiko
 
-# Define the SSH parameters for each node
+# SSH parameters for each node
 nodes = {
     'node1': 'ec2-user@3.95.184.194',
     'node2': 'ec2-user@54.237.186.247'
@@ -12,7 +12,7 @@ nodes = {
 # cpu use threshold
 cpu_threshold = 80
 
-# mem idle threshold
+# mem use threshold
 mem_threshold = 50
 
 # disk use threshold
@@ -37,8 +37,8 @@ def create_ssh_client(user, host, port=22):
     return client
 
 
-def get_usage_fact(ssh_client, command):
-    stdin, stdout, stderr = ssh_client.exec_command(command)
+def get_usage_fact(ssh_client_par, command):
+    stdin, stdout, stderr = ssh_client_par.exec_command(command)
     # Read the standard output
     output = stdout.read().decode().strip()
     # Handle potential error
