@@ -73,12 +73,3 @@ for key in "${!nodes[@]}"; do
 done
 
 
-high_usage_check() {
-    # $1 -- threshold
-    # $2 -- current stat
-
-    if [[ $2 -gt $1 ]]
-
-}
-
-
