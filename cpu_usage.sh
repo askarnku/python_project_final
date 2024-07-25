@@ -43,11 +43,12 @@ for key in "${!nodes[@]}"; do
     #stat print
     payload="Stats: cpu usage: $cpu_usage% memory usage: $memory_usage% disk usage: $disk_usage"
 
+    #CPU usage message
     if [[ "$cpu_usage" -gt "$cpu_threshold" ]]; then
 
         current_node="$key"
         date_time=$(date)
-        warning="WARNING!!! High CPU usage at: $cpu_usage on $key!"
+        warning="WARNING!!! High CPU usage: $cpu_usage% on $key!"
 
         json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" \
             '{text: ($date + "\n" + $warning + "\n")}')
@@ -55,13 +56,32 @@ for key in "${!nodes[@]}"; do
         curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
     fi
 
+    #memory usage condition    
+    if [[ "$memory_usage" -gt "$mem_threshold" ]]; then
 
-    #Warning of CPU MEM DISK usage if it is above threshold
+        date_time=$(date)
+        warning="WARNING!!! High memory usage: $memory_usage% on $key!"
+
+        json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" \
+            '{text: ($date + "\n" + $warning + "\n")}')
+
+        curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
+    fi
+
     
+    #disk storage low
+    if [[ "$disk_usage" -gt "$disk_threshold" ]]; then
 
+        current_node="$key"
+        date_time=$(date)
+        warning="WARNING!!! Low on disk storage: $disk_usage% used on $key!"
+
+        json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" \
+            '{text: ($date + "\n" + $warning + "\n")}')
+
+        curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
+    fi
     
-
-    curl -X POST -H 'Content-type: application/json' --data "{"text":\"$key $payload\"}" $slack_wh
 
     # curl -X POST -H 'Content-type: application/json' --data "{"text":\"$payload\"}" $slack_wh
 
