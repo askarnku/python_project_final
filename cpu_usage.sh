@@ -8,7 +8,7 @@ echo $(date)
 cpu_threshold="80"
 
 #mem idle threshold
-mem_threshold="80"
+mem_threshold="50"
 
 #disk use threshold
 disk_threshold="90"
