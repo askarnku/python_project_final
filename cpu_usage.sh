@@ -39,11 +39,27 @@ for key in "${!nodes[@]}"; do
 
     # Get disk usage
     disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
-
-    #Warning of CPU MEM DISK usage if it is above threshold
+    
+    #stat print
     payload="Stats: cpu usage: $cpu_usage% memory usage: $memory_usage% disk usage: $disk_usage"
 
-    curl -X POST -H 'Content-type: application/json' --data "{"text":\"$(date)\"}" $slack_wh
+    if [[ "$cpu_usage" -gt "$cpu_threshold" ]]; then
+
+        current_node="$key"
+        date_time=$(date)
+        warning="WARNING!!! High CPU usage at: $cpu_usage!"
+
+        json_payload=$(jq -n --arg date "$date_time" --arg warning "$warning" --arg node "$current_node" \
+            '{text: ($date + "\n" + $warning + "\n" + $node)}')
+
+        curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
+    fi
+
+
+    #Warning of CPU MEM DISK usage if it is above threshold
+    
+
+    
 
     curl -X POST -H 'Content-type: application/json' --data "{"text":\"$key $payload\"}" $slack_wh
 
@@ -55,4 +71,14 @@ for key in "${!nodes[@]}"; do
     echo "Disk Usage: $disk_usage"
 
 done
+
+
+high_usage_check() {
+    # $1 -- threshold
+    # $2 -- current stat
+
+    if [[ $2 -gt $1 ]]
+
+}
+
 
