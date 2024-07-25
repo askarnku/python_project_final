@@ -56,8 +56,10 @@ for key in "${!nodes[@]}"; do
         curl -X POST -H 'Content-type: application/json' --data "$json_payload" $slack_wh
     fi
 
+
     #memory usage condition    
-    if [[ "$memory_usage" -gt "$mem_threshold" ]]; then
+    comparison=$(echo "$memory_usage < $mem_threshold" | bc)
+    if [[ "$comparison" -ne 1 ]]; then
 
         date_time=$(date)
         warning="WARNING!!! High memory usage: $memory_usage% on $key!"
@@ -70,7 +72,7 @@ for key in "${!nodes[@]}"; do
 
     
     #disk storage low
-    if [[ "$disk_usage" -gt "$disk_threshold" ]]; then
+    if [[ "${disk_usage%\%}" -gt "$disk_threshold" ]]; then
 
         current_node="$key"
         date_time=$(date)
