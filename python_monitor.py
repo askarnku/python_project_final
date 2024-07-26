@@ -22,11 +22,10 @@ disk_threshold = 90
 command_cpu = "mpstat 1 1 | awk '/Average:/ {print 100 - $12}'"
 
 # Command to get MEM usage
-command_mem = "free -m | awk '/Mem:/ {print \$3/\$2 * 100.0}'"
+command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
 
 # Command to get DISK usage
-command_disk = "df -h / | awk '/\// {print \$5}'"
-
+command_disk = "df -h / | awk '/\// {print $5}'"
 
 # Function to create an SSH client
 def create_ssh_client(user, host, port=22):
