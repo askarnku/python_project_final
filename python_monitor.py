@@ -4,6 +4,7 @@ import paramiko
 import os
 import requests
 import json
+from datetime import datetime
 
 # child server data
 nodes = {
@@ -54,9 +55,10 @@ def get_usage_fact(ssh_client_ob, command):
 
 
 def send_warning(node_server, cpu, mem, disk):
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = (
-        f"Stats\n"
-        f"One of the resources are over utilized on {node_server}\n"
+        f"Stats as of {current_date}\n"
+        f"One or more of the resources on {node_server} are over utilized\n"
         f"CPU usage: {cpu}%\n"
         f"Memory Usage: {mem}%\n"
         f"Disk usage: {disk}%"
