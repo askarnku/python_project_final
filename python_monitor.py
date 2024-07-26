@@ -72,33 +72,22 @@ def send_warning(node_server, cpu, mem, disk):
     print(f"Status code: {response.status_code}")
 
 
+def check_thresholds(node, cpu_usage, mem_usage, disk_usage):
+    if cpu_usage >= cpu_threshold or mem_usage >= mem_threshold or disk_usage >= disk_threshold:
+        send_warning(node, cpu_usage, mem_usage, disk_usage)
+
+
 for node, addr in nodes.items():
     user, host = addr.split('@')
-    try:
-        ssh_client = create_ssh_client(user, host)
+try:
+    ssh_client = create_ssh_client(user, host)
+    with ssh_client:
         print(f"Connected to {node} successfully!")
+        cpu_usage = int(float(get_usage_fact(ssh_client, command_cpu)))
+        mem_usage = int(float(get_usage_fact(ssh_client, command_mem)))
+        disk_usage = int(float(get_usage_fact(ssh_client, command_disk).strip('%')))
+        
+        check_thresholds(node, cpu_usage, mem_usage, disk_usage)
 
-        cpu_usage = get_usage_fact(ssh_client, command_cpu)
-        mem_usage = get_usage_fact(ssh_client, command_mem)
-        disk_usage = get_usage_fact(ssh_client, command_disk)
-
-        cpu_usage_int = int(float(cpu_usage))
-        mem_usage_int = int(float(mem_usage))
-        disk_usage_int = int(float(disk_usage.strip('%')))
-
-        if cpu_usage_int >= cpu_threshold:
-            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
-            continue
-
-        if mem_usage_int >= mem_threshold:
-            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
-            continue
-
-        if disk_usage_int >= disk_threshold:
-            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
-            continue
-
-        ssh_client.close()
-
-    except Exception as e:
-        print(f"Failed to connect to {node}: {str(e)}")
+except Exception as e:
+    print(f"Failed to connect to {node}: {str(e)}")

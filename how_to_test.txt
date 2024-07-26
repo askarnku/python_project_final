@@ -1,0 +1,7 @@
+1. Install stress-ng
+
+2. Stress test cpu for 60 sec:
+    stress-ng --cpu 4 --timeout 60s
+
+3. Stress test cpu and memory for 60 sec: 
+    stress-ng --vm 1 --vm-bytes 90% --vm-keep --timeout 60s
