@@ -27,13 +27,16 @@ for node, addr in nodes.items():
         # command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
 
         # Command to get DISK usage
-        command_disk = "df -h / | awk '/\// {print $5}'"
+        # command_disk = "df -h / | awk '/\// {print $5}'"
+
+        # Command to get CPU usage
+        command_cpu = "mpstat 1 1 | awk '/Average:/ {print 100 - $12}'"
 
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
 
         # Example: Execute a command (like 'hostname')
-        stdin, stdout, stderr = ssh_client.exec_command(command_disk)
+        stdin, stdout, stderr = ssh_client.exec_command(command_cpu)
         print(f"stout: {stdout.read().decode().strip()}")
         print(f"stderr of {node}: {stderr.read().decode().strip()}")
 
