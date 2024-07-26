@@ -24,16 +24,18 @@ for node, addr in nodes.items():
     try:
 
         # Command to get MEM usage
-        command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
+        # command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
+
+        # Command to get DISK usage
+        command_disk = "df -h / | awk '/\// {print \$5}'"
 
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
 
         # Example: Execute a command (like 'hostname')
-        stdin, stdout, stderr = ssh_client.exec_command(command_mem)
+        stdin, stdout, stderr = ssh_client.exec_command(command_disk)
         print(f"stout: {stdout.read().decode().strip()}")
         print(f"stderr of {node}: {stderr.read().decode().strip()}")
-
 
         # Close the SSH connection
         ssh_client.close()
