@@ -53,13 +53,13 @@ def get_usage_fact(ssh_client_ob, command):
         return output
 
 
-def send_warning(cpu, mem, disk):
+def send_warning(node_server, cpu, mem, disk):
     message = (
         f"Stats\n"
-        "One of the resources are over utilized\n"
-        f"CPU usage: {cpu}\n"
-        f"Memory Usage: {mem}\n"
-        f"Disk usage: {disk}"
+        f"One of the resources are over utilized on {node_server}\n"
+        f"CPU usage: {cpu}%\n"
+        f"Memory Usage: {mem}%\n"
+        f"Disk usage: {disk}%"
     )
 
     payload = {
@@ -85,17 +85,15 @@ for node, addr in nodes.items():
         disk_usage_int = int(float(disk_usage.strip('%')))
 
         if cpu_usage_int >= cpu_threshold:
-            print(cpu_usage_int)
-            print(cpu_threshold)
-            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
             continue
 
         if mem_usage_int >= mem_threshold:
-            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
             continue
 
         if disk_usage_int >= disk_threshold:
-            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
             continue
 
         # Close the SSH connection
