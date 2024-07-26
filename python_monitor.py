@@ -2,7 +2,7 @@
 
 import paramiko
 
-# SSH parameters for each node
+# child server data
 nodes = {
     'node1': 'ec2-user@3.95.184.194',
     'node2': 'ec2-user@54.237.186.247'
@@ -27,7 +27,7 @@ command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
 # Command to get DISK usage
 command_disk = "df -h / | awk '/\// {print $5}'"
 
-# Function to create an SSH client
+
 def create_ssh_client(user, host, port=22):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Accepts host key automatically
@@ -36,8 +36,8 @@ def create_ssh_client(user, host, port=22):
     return client
 
 
-def get_usage_fact(ssh_client_par, command):
-    stdin, stdout, stderr = ssh_client_par.exec_command(command)
+def get_usage_fact(ssh_client_ob, command):
+    stdin, stdout, stderr = ssh_client_ob.exec_command(command)
     # Read the standard output
     output = stdout.read().decode().strip()
     # Handle potential error
@@ -47,27 +47,31 @@ def get_usage_fact(ssh_client_par, command):
         return output
 
 
-# Loop through the nodes and connect to each
 for node, addr in nodes.items():
     user, host = addr.split('@')
     try:
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
 
-        # current usages
         cpu_usage = get_usage_fact(ssh_client, command_cpu)
 
         mem_usage = get_usage_fact(ssh_client, command_mem)
 
         disk_usage = get_usage_fact(ssh_client, command_disk)
 
-        print(f"CPU usage {cpu_usage}")
-        print(f"Memory Usage {mem_usage}")
-        print(f"Disk usage {disk_usage}")
+        cpu_usage_int = int(float(cpu_usage))
 
-        print(f"CPU data type  {type(cpu_usage)}")
-        print(f"Memory data type {type(mem_usage)}")
-        print(f"Disk usage data type {type(disk_usage)}")
+        mem_usage_int = int(float(mem_usage))
+
+        disk_usage_int = int(float(disk_usage.strip('%')))
+
+        print(f"CPU usage {cpu_usage_int}")
+        print(f"Memory Usage {mem_usage_int}")
+        print(f"Disk usage {disk_usage_int}")
+
+        print(f"CPU data type  {type(cpu_usage_int)}")
+        print(f"Memory data type {type(mem_usage_int)}")
+        print(f"Disk usage data type {type(disk_usage_int)}")
 
         # Close the SSH connection
         ssh_client.close()
