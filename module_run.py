@@ -27,7 +27,7 @@ for node, addr in nodes.items():
         # command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
 
         # Command to get DISK usage
-        command_disk = "df -h / | awk '/\// {print \$5}'"
+        command_disk = "df -h / | awk '/\// {print $5}'"
 
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
