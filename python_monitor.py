@@ -65,6 +65,10 @@ for node, addr in nodes.items():
         print(f"Memory Usage {mem_usage}")
         print(f"Disk usage {disk_usage}")
 
+        print(f"CPU data type  {type(cpu_usage)}")
+        print(f"Memory data type {type(mem_usage)}")
+        print(f"Disk usage data type {type(disk_usage)}")
+
         # Close the SSH connection
         ssh_client.close()
 
