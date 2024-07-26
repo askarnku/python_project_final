@@ -1,12 +1,18 @@
 #!/bin/python3
 
 import paramiko
+import os
+import requests
+import json
 
 # child server data
 nodes = {
     'node1': 'ec2-user@3.95.184.194',
     'node2': 'ec2-user@54.237.186.247'
 }
+
+# Fetch the webhook URL from the environment variables
+slack_wh = os.getenv('SLACK_WEBHOOK_URL_DEV')
 
 # Thresholds
 # cpu use threshold
@@ -47,6 +53,23 @@ def get_usage_fact(ssh_client_ob, command):
         return output
 
 
+def send_warning(cpu, mem, disk):
+    message = (
+        f"Stats\n"
+        "One of the resources are over utilized\n"
+        f"CPU usage: {cpu}\n"
+        f"Memory Usage: {mem}\n"
+        f"Disk usage: {disk}"
+    )
+
+    payload = {
+        "text": message
+    }
+
+    response = requests.post(slack_wh, data=json.dumps(payload))
+    print(f"Status code: {response.status_code}")
+
+
 for node, addr in nodes.items():
     user, host = addr.split('@')
     try:
@@ -54,24 +77,24 @@ for node, addr in nodes.items():
         print(f"Connected to {node} successfully!")
 
         cpu_usage = get_usage_fact(ssh_client, command_cpu)
-
         mem_usage = get_usage_fact(ssh_client, command_mem)
-
         disk_usage = get_usage_fact(ssh_client, command_disk)
 
         cpu_usage_int = int(float(cpu_usage))
-
         mem_usage_int = int(float(mem_usage))
-
         disk_usage_int = int(float(disk_usage.strip('%')))
 
-        print(f"CPU usage {cpu_usage_int}")
-        print(f"Memory Usage {mem_usage_int}")
-        print(f"Disk usage {disk_usage_int}")
+        if cpu_usage_int >= cpu_threshold:
+            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            continue
 
-        print(f"CPU data type  {type(cpu_usage_int)}")
-        print(f"Memory data type {type(mem_usage_int)}")
-        print(f"Disk usage data type {type(disk_usage_int)}")
+        if mem_usage_int >= mem_threshold:
+            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            continue
+
+        if disk_usage_int >= disk_threshold:
+            send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
+            continue
 
         # Close the SSH connection
         ssh_client.close()
