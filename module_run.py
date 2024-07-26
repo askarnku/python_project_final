@@ -24,7 +24,7 @@ for node, addr in nodes.items():
     try:
 
         # Command to get MEM usage
-        command_mem = "free -m"
+        command_mem = "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'"
 
         ssh_client = create_ssh_client(user, host)
         print(f"Connected to {node} successfully!")
