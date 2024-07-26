@@ -85,6 +85,8 @@ for node, addr in nodes.items():
         disk_usage_int = int(float(disk_usage.strip('%')))
 
         if cpu_usage_int >= cpu_threshold:
+            print(cpu_usage_int)
+            print(cpu_threshold)
             send_warning(cpu_usage_int, mem_usage_int, disk_usage_int)
             continue
 
