@@ -98,7 +98,6 @@ for node, addr in nodes.items():
             send_warning(node, cpu_usage_int, mem_usage_int, disk_usage_int)
             continue
 
-        # Close the SSH connection
         ssh_client.close()
 
     except Exception as e:
