@@ -79,15 +79,16 @@ def check_thresholds(node, cpu_usage, mem_usage, disk_usage):
 
 for node, addr in nodes.items():
     user, host = addr.split('@')
-try:
-    ssh_client = create_ssh_client(user, host)
-    with ssh_client:
-        print(f"Connected to {node} successfully!")
-        cpu_usage = int(float(get_usage_fact(ssh_client, command_cpu)))
-        mem_usage = int(float(get_usage_fact(ssh_client, command_mem)))
-        disk_usage = int(float(get_usage_fact(ssh_client, command_disk).strip('%')))
-        
-        check_thresholds(node, cpu_usage, mem_usage, disk_usage)
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        ssh_client = create_ssh_client(user, host)
+        with ssh_client:
+            print(f"{current_date} Connected to {node} successfully!")
+            cpu_usage = int(float(get_usage_fact(ssh_client, command_cpu)))
+            mem_usage = int(float(get_usage_fact(ssh_client, command_mem)))
+            disk_usage = int(float(get_usage_fact(ssh_client, command_disk).strip('%')))
+            
+            check_thresholds(node, cpu_usage, mem_usage, disk_usage)
 
-except Exception as e:
-    print(f"Failed to connect to {node}: {str(e)}")
+    except Exception as e:
+        print(f"Failed to connect to {node}: {str(e)}")
