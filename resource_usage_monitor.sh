@@ -25,11 +25,11 @@ for key in "${!nodes[@]}"; do
 
     child_server="${nodes[$key]}"
 
-    cpu_usage=$(ssh $child_server "mpstat 1 1 | awk '/Average:/ {print 100 - \$12}'")
+    cpu_usage=$(ssh $child_server "mpstat 1 1 | awk '/Average:/ {print 100 - $12}'")
 
-    memory_usage=$(ssh $child_server "free -m | awk '/Mem:/ {print \$3/\$2 * 100.0}'")
+    memory_usage=$(ssh $child_server "free -m | awk '/Mem:/ {print $3/$2 * 100.0}'")
 
-    disk_usage=$(ssh $child_server "df -h / | awk '/\// {print \$5}'")
+    disk_usage=$(ssh $child_server "df -h / | awk '/\// {print $5}'")
     
     #stat print
     payload="Stats: cpu usage: $cpu_usage% memory usage: $memory_usage% disk usage: $disk_usage"
